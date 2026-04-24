@@ -1,11 +1,11 @@
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY src ./src
 
-FROM node:22-alpine
+FROM node:25-alpine
 WORKDIR /app
 RUN apk add --no-cache sqlite
 COPY --from=build /app /app
