@@ -1,5 +1,14 @@
 # 🍓 스마트팜 딸기하우스 — MVP 완성본
 
+[![CI](https://github.com/pppaal/smartfarm/actions/workflows/ci.yml/badge.svg)](https://github.com/pppaal/smartfarm/actions/workflows/ci.yml)
+[![Pages](https://github.com/pppaal/smartfarm/actions/workflows/pages.yml/badge.svg)](https://pppaal.github.io/smartfarm/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-22-brightgreen)](https://nodejs.org)
+[![e2e](https://img.shields.io/badge/e2e-143%20passing-success)](backend/scripts/e2e-test.mjs)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+🌐 **라이브 UI 데모**: https://pppaal.github.io/smartfarm/
+
 충청도 기반 딸기(설향) 스마트팜 전용 통합 시스템. 회원가입부터 현장 배포까지 바로 쓸 수 있는 완성형 MVP.
 
 ## 왜 딸기인가

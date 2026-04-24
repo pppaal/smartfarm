@@ -30,6 +30,12 @@ export default function Login() {
         <p style={{ fontSize: 12, color: '#8a96a5', marginTop: 14 }}>
           데모: demo@smartfarm.kr / demo1234
         </p>
+        {import.meta.env.VITE_DEMO_MODE === 'true' && (
+          <p style={{ fontSize: 11, color: '#e6b66b', marginTop: 6, padding: 8, background: '#1d2531', borderRadius: 6 }}>
+            ⚠ 이 페이지는 UI 미리보기입니다. 실제 사용하려면 로컬에 백엔드를 실행해야 합니다.
+            <br/>GitHub: <a href="https://github.com/pppaal/smartfarm" target="_blank">pppaal/smartfarm</a>
+          </p>
+        )}
         <p style={{ fontSize: 13, color: '#8a96a5', marginTop: 8, textAlign: 'center' }}>
           <Link to="/register">회원가입</Link> · <Link to="/forgot">비밀번호 찾기</Link>
         </p>

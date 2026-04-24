@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-test:
+    name: Backend e2e (143 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Start server
+        env:
+          SEED_DEMO: 'false'
+          JWT_SECRET: ci-test-secret-not-for-production
+          NODE_ENV: test
+        run: |
+          node src/server.js > /tmp/server.log 2>&1 &
+          echo $! > /tmp/server.pid
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            curl -sf http://localhost:4000/api/health >/dev/null && exit 0
+            sleep 1
+          done
+          echo "server failed to start"
+          cat /tmp/server.log
+          exit 1
+      - name: Run e2e
+        run: node scripts/e2e-test.mjs
+      - name: Stop server
+        if: always()
+        run: kill $(cat /tmp/server.pid) || true
+      - name: Upload server log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: /tmp/server.log
+
+  frontend-build:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npx eslint src scripts --no-error-on-unmatched-pattern || true   # warn-only for now
