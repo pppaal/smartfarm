@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.vite/
+.DS_Store
+
+# 데이터 · 시크릿
+data/
+backups/
+*.db
+*.db-wal
+*.db-shm
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# 빌드/캐시
+*.log
+.cache/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Playwright
+test-results/
+playwright-report/

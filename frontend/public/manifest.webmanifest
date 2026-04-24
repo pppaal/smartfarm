@@ -1,0 +1,14 @@
+{
+  "name": "스마트팜 딸기하우스",
+  "short_name": "스마트팜",
+  "description": "딸기 스마트팜 실시간 모니터링 및 자동제어",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1216",
+  "theme_color": "#2d6cdf",
+  "lang": "ko",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

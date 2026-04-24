@@ -1,0 +1,45 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - DB_PATH=/data/smartfarm.db
+      - JWT_SECRET=${JWT_SECRET:-change-me-to-a-long-random-secret}
+      - SEED_DEMO=${SEED_DEMO:-false}
+    volumes:
+      - smartfarm-data:/data
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+  # 매일 새벽 3시 SQLite 자동 백업 (최근 14개 유지)
+  backup:
+    image: alpine:3
+    restart: unless-stopped
+    depends_on:
+      - backend
+    volumes:
+      - smartfarm-data:/data:ro
+      - ./backups:/backups
+    command: >
+      sh -c "apk add --no-cache sqlite tzdata &&
+             export TZ=Asia/Seoul &&
+             while true; do
+               now=$$(date +%Y%m%d-%H%M);
+               sqlite3 /data/smartfarm.db \".backup /backups/smartfarm-$$now.db\";
+               ls -1t /backups/smartfarm-*.db 2>/dev/null | tail -n +15 | xargs -r rm --;
+               echo \"[backup] $$now done\";
+               sleep 86400;
+             done"
+
+volumes:
+  smartfarm-data:
