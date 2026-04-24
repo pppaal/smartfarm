@@ -11,7 +11,7 @@
     "test:e2e": "node scripts/e2e-test.mjs"
   },
   "dependencies": {
-    "@sentry/node": "^8.45.0",
+    "@sentry/node": "^10.50.0",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^11.3.0",
     "cors": "^2.8.5",
